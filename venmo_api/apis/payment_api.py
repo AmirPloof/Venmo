@@ -28,14 +28,25 @@ class PaymentApi(object):
                                    limit=limit,
                                    callback=callback)
 
-    def get_pay_payments(self, limit=100000, callback=None):
+    def get_sent_payments(self, limit=100000, callback=None):
         """
         Get a list of pay ongoing payments (pending requested money from your profile)
         :param limit:
         :param callback:
         :return:
         """
-        return self.__get_payments(action="pay",
+        return self.__get_payment(action="pay",
+                                   limit=limit,
+                                   callback=callback)
+
+    def get_received_payments(self, limit=100000, callback=None):
+        """
+        Get a list of pay ongoing payments (pending requested money from your profile)
+        :param limit:
+        :param callback:
+        :return:
+        """
+        return self.__get_received(action="pay",
                                    limit=limit,
                                    callback=callback)
 
@@ -169,7 +180,7 @@ class PaymentApi(object):
                                           method='PUT',
                                           ok_error_codes=list(self.__payment_error_codes.values())[:-1])
 
-    def __get_payments(self, action, limit, callback=None):
+    def __get_payment(self, action, limit, callback=None):
         """
         Get a list of ongoing payments with the given action
         :return:
@@ -191,6 +202,29 @@ class PaymentApi(object):
             return
 
         return deserialize(response=response, data_type=Payment)
+
+    def __get_received(self, action, limit, callback=None):
+            """
+            Get a list of ongoing requests with the given action
+            :return:
+            """
+            wrapped_callback = wrap_callback(callback=callback,
+                                            data_type=Payment)
+
+            resource_path = '/payments'
+            parameters = {
+                "action": action,
+                "target": self.__profile.id,
+                "limit": limit
+            }
+            response = self.__api_client.call_api(resource_path=resource_path,
+                                                params=parameters,
+                                                method='GET',
+                                                callback=wrapped_callback)
+            if callback:
+                return
+
+            return deserialize(response=response, data_type=Payment)
 
     def __send_or_request_money(self, amount: float,
                                 note: str,
