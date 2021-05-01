@@ -35,7 +35,7 @@ class PaymentApi(object):
         :param callback:
         :return:
         """
-        return self.__get_payment(action="pay",
+        return self.__get_payments(action="pay",
                                    limit=limit,
                                    callback=callback)
 
@@ -46,7 +46,7 @@ class PaymentApi(object):
         :param callback:
         :return:
         """
-        return self.__get_received(action="pay",
+        return self.__get_receiveds(action="pay",
                                    limit=limit,
                                    callback=callback)
 
@@ -180,7 +180,7 @@ class PaymentApi(object):
                                           method='PUT',
                                           ok_error_codes=list(self.__payment_error_codes.values())[:-1])
 
-    def __get_payment(self, action, limit, callback=None):
+    def __get_payments(self, action, limit, callback=None):
         """
         Get a list of ongoing payments with the given action
         :return:
@@ -203,7 +203,7 @@ class PaymentApi(object):
 
         return deserialize(response=response, data_type=Payment)
 
-    def __get_received(self, action, limit, callback=None):
+    def __get_receiveds(self, action, limit, callback=None):
             """
             Get a list of ongoing requests with the given action
             :return:
