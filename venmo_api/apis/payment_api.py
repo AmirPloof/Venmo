@@ -28,6 +28,17 @@ class PaymentApi(object):
                                    limit=limit,
                                    callback=callback)
 
+    def get_charge_receiveds(self, limit=100000, callback=None):
+        """
+        Get a list of charge ongoing payments (pending request money)
+        :param limit:
+        :param callback:
+        :return:
+        """
+        return self.__get_receiveds(action="charge",
+                                   limit=limit,
+                                   callback=callback)
+
     def get_sent_payments(self, limit=100000, callback=None):
         """
         Get a list of pay ongoing payments (pending requested money from your profile)
